@@ -1,0 +1,22 @@
+/* HOME PAGE */
+@media (min-width: 992px) {
+    .nav-link {
+      margin-left: 24px;
+    }
+}
+
+.contact-email a {
+  text-decoration: none;
+  color: black;
+}
+
+
+
+/* DEMO PAGE */
+.demo-wrap {
+  margin-top: 32px;
+  padding: 12px;
+}
+.canvas {
+  border: 1px solid black;
+}
