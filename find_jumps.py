@@ -3,7 +3,7 @@ import scipy
 import scipy.signal
 
 
-__all__ = ['find_jumps', 'measure_dot', 'measure_cos']
+__all__ = ['find_jumps', 'find_jumps_fast', 'measure_dot', 'measure_cos']
 
 
 def measure_dot(x, y):
@@ -11,6 +11,46 @@ def measure_dot(x, y):
 
 def measure_cos(x, y):
     return 1 - scipy.spatial.distance.cosine(x, y)
+
+
+def find_jumps(features, threshold=0.95, measure=measure_cos):
+    '''
+    Finds possible jumps with self similarity matrix.
+
+    Input:
+    - features:
+        An n*m array, where n = number of frames, m = number of feature
+        dimensions.
+    - threshold:
+        A number in range (0, 1).
+    - measure:
+        A function that takes 2 vectors and returns their SIMILARITY (not
+        DISTANCE)
+
+    Output:
+      A list of tuples like (l, r, s), where l, r (l < r)
+      represents the two ends (frame indices) of a jump, and s is the
+      min-max normalized similarity.
+
+      Result is sorted by s in descending order.
+    '''
+    simils = [np.array([])]
+    s_min = np.inf
+    s_max = -np.inf
+    for i in range(1, features.shape[0]):
+        simil = np.array([measure(features[i], features[j]) for j in range(i)])
+        simils.append(simil)
+        s_min = min(s_min, simil.min())
+        s_max = max(s_max, simil.max())
+    for i in range(len(simils)):
+        simils[i] = (simils[i] - s_min)/(s_max - s_min)
+    candidates = []
+    for i in range(1, len(simils)):
+        for j in range(i):
+            if simils[i][j] >= threshold:
+                candidates.append((j, i, simils[i][j]))
+    candidates.sort(key=lambda x: x[2], reverse=True)
+    return candidates
 
 
 def argmax_slice(x, l, r):
@@ -47,10 +87,13 @@ def calc_similarity(x, interval, measure):
                      for i in range(interval, x.shape[0])])
 
 
-def find_jumps(features, min_length=180, measure=measure_dot, r_len=0.5, r_simil=0.9):
+def find_jumps_fast(features, min_length=180, measure=measure_dot, r_len=0.5, r_simil=0.9):
     '''
     Finds possible jumps.
-    
+
+    This method runs faster for very large number of frames, but accuracy
+    is much reduced. Consider use find_jump instead.
+
     Input:
     - features:
         An n*m array, where n = number of frames, m = number of feature
@@ -67,12 +110,12 @@ def find_jumps(features, min_length=180, measure=measure_dot, r_len=0.5, r_simil
     - r_simil:
         Threshold-like parameter in range (0, 1) for finding jump points,
         too high or too low can both reduce the number of results.
-    
+
     Output:
       A list of tuples like (l, r, s), where l, r (l + min_length <= r)
       represents the two ends (frame indices) of a jump, and s is the
-      similarity.
-      
+      min-max normalized similarity.
+
       Result is sorted by s in descending order.
     '''
     n, m = features.shape
