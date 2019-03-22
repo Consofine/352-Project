@@ -17,19 +17,69 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="index.html">Home</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="#">Demo <span class="sr-only">(current)</span></a>
         </li>
       </ul>
     </div>
   </nav>
-  <div class="demo-wrap text-center">
-    <canvas id="canvas" class="canvas" width="500px" height="500px">
-      Your browser does not support the HTML canvas.
-    </canvas>
+  <div class="demo-page-wrap container">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="demo-wrap text-center">
+          <h3 class="demo-header">Demo: Call Me Maybe by Carly Rae Jepsen</h3>
+          <video class="video-demo" height="480" width="360" controls>
+            <source src="./aud-vid/call-me-maybe.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div> <!-- /col -->
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="demo-wrap">
+          <h3 class="demo-header text-center">Audio Demo</h3>
+          <p class="lead">
+            As you can likely tell, the video is a bit choppy. This is due to the fact that the javascript running the interface is constantly converting between beats and time points within the song- rounding and some errors (for example, in the
+            number of beats per minute, which may not be a perfectly exact number) can lead to some small but noticeable errors in jumps between similar beats.
+          </p>
+          <p class="lead">
+            For this reason, we've included a separate audio demo. You won't have the benefit of watching at which points the song jumps, but you will be able to enjoy much smoother audio as we've eliminated rounding errors.
+          </p>
+          <div class="text-center">
+            <button type="button" class="btn btn-primary audio-demo" onClick="playAudio()" id="btn">Play Audio</button>
+          </div>
+        </div>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+    <!-- <div class="demo-wrap text-center">
+      <canvas id="canvas" class="canvas" width="500px" height="500px">
+        Your browser does not support the HTML canvas.
+      </canvas>
+    </div> -->
+    <h3 class="demo-header text-center">UI Comparison</h3>
+    <p class="lead">
+      As can be seen below, our user interfaces are similar. One thing worth noting is that our products resulted in slightly different jump points: our version contained some pairs that are not found in the original. This is due to our tolerance
+      threshold for measuring similarity: ours tolerance is likely a little less strict, resulting in more pairs of beats qualifying as "similar enough" to include.
+    </p>
+    <div class="card-deck">
+      <div class="card">
+        <img class="card-img-top" src="./img/ijredux.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Our Infinite Jukebox UI</h5>
+          <p class="card-text">We built this UI in the shape of a square as a compromise between effective display and ease of construction (as none of us are graphics experts and circles are more complex).</p>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img-top" src="./img/ij.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Original Infinite Jukebox</h5>
+          <p class="card-text">This is the original product. The two function similarly: they consist of paths drawn between rectangles (each representing a beat in the song), with some animation to demonstrate the current point in the song as well
+            as to illustrate when jumps occur.</p>
+        </div>
+      </div>
+    </div>
   </div>
   <audio src="./songs/gangnam-style.mp3" id="demo"></audio>
   <source src="http://static.echonest.com/audio2/01%20Call%20Me%20Maybe%201.mp3" type="audio/mpeg">

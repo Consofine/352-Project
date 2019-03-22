@@ -26,32 +26,73 @@
       </ul>
     </div>
   </nav>
-  <div class="jumbotron jumbotron-fluid text-center">
-    <div class="container">
-      <h1 class="display-4">Infinite Jukebox Redux</h1>
-      <h4 class="subtitle">By: Mike Considine, Ethan Lee, and Shengkai Zhou</h4>
-      <h4 class="contact-email">Contact:
-        <a href="mailto:ethanlee2020@u.northwestern.edu">ethanlee2020@u.northwestern.edu</a>
-      </h4>
-    </div>
+  <div class="container text-center header-wrap">
+    <h1 class="display-4">Infinite Jukebox Redux</h1>
+    <h4 class="subtitle">By: Mike Considine, Ethan Lee, and Shengkai Zhou</h4>
+    <h4 class="contact-email">Contact:
+      <a href="mailto:ethanlee2020@u.northwestern.edu">ethanlee2020@u.northwestern.edu</a>
+    </h4>
   </div>
   <div class="content-wrap container">
-    <div class="course-wrap">
-      <p class="lead">
-        This is a final group project for the Northwestern University course EECS 352, Machine Perception of Audio, taught by Prof. Bryan Pardo.
-      </p>
-      <p class="lead">
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      </p>
-      <p class="lead">
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      </p>
-      <p class="lead">
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      </p>
+    <h3 class="demo-header text-center">About the Infinite Jukebox</h3>
+    <p class="lead"> Built as a final project for EECS 352: Machine Perception of Audio, taught by Prof. Bryan Pardo at Northwestern University
+    </p>
+    <p class="lead">
+      We wanted to think of a way to prolong a song for longer than its actual runtime. While thinking of different ways to approach this, we remembered a project that was showed in class- the Infinite Jukebox (which can be found
+      <a href="http://infinitejukebox.playlistmachinery.com/" class="text-link">here</a>). After looking further into it, we
+      thought it would be a cool idea to attempt creating our own version of an infinite jukebox. This project isn't groundbreaking or outstandingly creative by any means, but we learned a lot by implementing concepts that we learned in class in
+      an interesting way.
+    </p>
+    <p class="lead">
+      At a high level, an infinite jukebox consists of breaking down a song into a series of feature vectors and then aggregating those feature vectors into each beat of the song. Once that is done, we find the
+      beats that are very similar (using a distance measure like euclidean distance) and can then loop back and forth in these pairs of similar beats, hopeffully without the listener noticing. We decided to use songs that work with the original
+      Infinite Jukebox as this would give us a baseline with which to compare. We settled on Call Me Maybe by Carly Rae Jepsen as our demo song because it contains a lot of repetition and it works seamlessly with the original Infinite Jukebox.
+    </p>
+    <p class="lead">
+      There were a lot of different factors to explore and tweak. These included which features to use, our distance measure for our similarity matrix, what our threshold should be to deem two beats similar enough, and how we chose to
+      aggregate our features into beats. There was also the task of creating a user-friendly UI to demonstrate which beats are correlated with which other beats as well as playing the song in a way that clearly communicates jump points.
+    </p>
+    <p class="lead">
+      The first step was to determine where each beat was in the audio sample. Thankfully, Librosa provides a function to do just that for us. One thing we noticed was that there seemed to be some dead time in the beginning of the audio that doesn't
+      correspond to the beginning of the first beat, so we clipped the beginning of the audio to account for that.
+      We decided to compare the results of using features generated from the Mel-Frequency Cepstral Coefficients (MFCC) and chroma spectrogram of the audio. Our initial method for evaluation was subjective: simply listening to samples and
+      determining which contained fewer noticeable
+      jumps. Once we had built a working project, we conducting results analysis by having our friends listen to audio samples, noting every time they heard a jump. Of the 139 jumps in 6 random samples, testers only thought they heard something
+      wrong 16 times, and 3 of them were false-alarms. We concluded that these results were acceptable. We compared this to the original Infinite Jukebox, in which we heard no detectible jumps.
+    </p>
+    <h3 class="demo-header text-center">Similarity Matrices</h3>
+    <div class="card-deck">
+      <div class="card">
+        <img class="card-img-top" src="./img/mfccall.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Entire Similarity Matrix</h5>
+          <p class="card-text">This is the similarity matrix calculated from Call Me Maybe. It includes all ranges of similarity, meaning there is no threshold for only showing the most similar beats. As you can tell, it's not very precise.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img-top" src="./img/mfccbest50.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Similarity Matrix: Best 50%</h5>
+          <p class="card-text">This similarity matrix comes from the same values, but it includes a threshold to only show the top 50% of all values. Therefore, the most similar 50% are shown here. This looks better; however, it's still not very
+            precise.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-deck">
+      <div class="card">
+        <img class="card-img-top" src="./img/mfccbest1.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Similarity Matrix: Best 1%</h5>
+          <p class="card-text">The threshold on this similarity matrix only includes the top 1% of similar values. It looks pretty good, but could still use a little more trimmming.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img-top" src="./img/mfccbest.1.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Similarity Matrix: Best 0.1%</h5>
+          <p class="card-text">Finally, this is the similarity matrix we ended with. It only includes the top 0.1% of similar values, and it is indeed very precise.</p>
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

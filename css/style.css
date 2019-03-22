@@ -5,18 +5,47 @@
     }
 }
 
+.header-wrap {
+  margin-bottom: 64px;
+}
+
 .contact-email a {
   text-decoration: none;
   color: black;
 }
 
+.text-link {
+  text-decoration: none;
+  color: blue;
+}
 
+.text-link:hover {
+  text-decoration: none;
+}
 
 /* DEMO PAGE */
 .demo-wrap {
   margin-top: 32px;
-  padding: 12px;
 }
+
+.demo-page-wrap {
+  padding: 16px;
+}
+
+.video-demo {
+  max-width: 100%;
+  height: auto;
+  margin-top: 16px;
+}
+
+.row {
+  margin-bottom: 32px;
+}
+
+.card-deck {
+  margin-bottom: 32px;
+}
+
 .canvas {
   border: 1px solid black;
 }
