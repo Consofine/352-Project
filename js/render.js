@@ -1,8 +1,9 @@
-var bpm = 60;
-var min = 4;
-var count = bpm * min;
+var bpm = 120;
+var seconds = 194;
+var count = bpm * seconds / 60;
 var length = (count / 4);
 var width = (380 / length);
+console.log(length);
 
 function draw() {
   var canvas = document.getElementById('canvas');
@@ -71,7 +72,8 @@ function showPaths(beat1, beat2) {
     ctx.beginPath();
     ctx.moveTo(obj1.x, obj1.y);
     if (obj1.x != obj2.x && obj1.y != obj2.y) {
-      ctx.quadraticCurveTo(obj1.x, obj2.y, obj2.x, obj2.y);
+      ctx.quadraticCurveTo(250, 250, obj2.x, obj2.y);
+      // ctx.bezierCurverTo(250, 250, obj1.x, obj2.)
     } else if (obj1.x == obj2.x) {
       ctx.quadraticCurveTo(250, obj2.y, obj2.x, obj2.y);
     } else if (obj1.y == obj2.y) {
@@ -82,7 +84,7 @@ function showPaths(beat1, beat2) {
 }
 
 
-function updateSquare(beat1s, beat2s) {
+function updateSquare(beat1s, beat2s, audio) {
   var i = 0;
   window.setInterval(function() {
     var canvas = document.getElementById('canvas');
@@ -96,23 +98,35 @@ function updateSquare(beat1s, beat2s) {
       ctx.fillStyle = 'white';
       var side = Math.floor((j % count) / length);
       if (side == 0) {
-        ctx.fillRect(60 + (width * (j % length)) - 2, 40, width + 2.5, 10);
+        ctx.fillRect(60 + (width * (j % length)) - 2, 40, width + 3, 10);
       } else if (side == 1) {
-        ctx.fillRect(450, 60 + (width * (j % length)) - 2, 10, width + 2.5);
+        ctx.fillRect(450, 60 + (width * (j % length)) - 2, 10, width + 3);
       } else if (side == 2) {
-        ctx.fillRect(440 - (width * ((j % length) + 1)) - 2, 450, width + 2.5, 10);
+        ctx.fillRect(440 - (width * ((j % length) + 1)) - 2, 450, width + 3, 10);
       } else if (side == 3) {
-        ctx.fillRect(40, 440 - (width * ((j % length) + 1)) - 2, 10, width + 2.5);
+        ctx.fillRect(40, 440 - (width * ((j % length) + 1)) - 2, 10, width + 3);
       }
       if (beat1s.includes(i % count)) {
-        var random = Math.floor(Math.random() * 2);
-        if (random == 1) {
+        if (beat1s[beat1s.length - 1] == (i % count)) {
           i = beat2s[beat1s.indexOf(i % count)];
+          audio.currentTime = (i % count) * 60 / bpm;
+        } else {
+          var random = Math.floor(Math.random() * 2);
+          if (random == 1 && beat1s.indexOf(i % count) != beat1s.length - 1) {
+            i = beat2s[beat1s.indexOf(i % count)];
+            audio.currentTime = (i % count) * 60 / bpm;
+          }
         }
       } else if (beat2s.includes(i % count)) {
-        var random = Math.floor(Math.random() * 2);
-        if (random == 1) {
+        if (beat2s[beat2s.length - 1] == (i % count)) {
           i = beat1s[beat2s.indexOf(i % count)];
+          audio.currentTime = (i % count) * 60 / bpm;
+        } else {
+          var random = Math.floor(Math.random() * 2);
+          if (random == 1 && beat2s.indexOf(i % count) != beat2s.length - 1) {
+            i = beat1s[beat2s.indexOf(i % count)];
+            audio.currentTime = (i % count) * 60 / bpm;
+          }
         }
       }
       ctx.fillStyle = styles[(i % (styles.length - 1))];
@@ -128,30 +142,35 @@ function updateSquare(beat1s, beat2s) {
       }
     }
     i++;
-  }, 200);
+  }, (1000 / (bpm / 60)));
 }
 
 
 draw();
 
 
-// test
-function test() {
-  var beats = [
-    [20, 40],
-    [70, 130],
-    [180, 220],
-    [50, 200],
-    [180, 100],
-    [130, 40]
-  ];
-  var beat1s = [];
-  var beat2s = [];
-  for (var i = 0; i < beats.length; i++) {
-    showPaths(beats[i][0], beats[i][1]);
-    beat1s.push(beats[i][0]);
-    beat2s.push(beats[i][1]);
-  }
-  updateSquare(beat1s, beat2s);
+
+var beats = [
+  [40, 120],
+  [50, 200],
+  [60, 85],
+  [20, 35],
+  [145, 65],
+  [85, 135],
+  [70, 130],
+  [130, 40],
+  [180, 100],
+  [180, 220],
+];
+var beat1s = [];
+var beat2s = [];
+for (var i = 0; i < beats.length; i++) {
+  showPaths(beats[i][0], beats[i][1]);
+  beat1s.push(beats[i][0]);
+  beat2s.push(beats[i][1]);
 }
-test();
+
+
+var audio = new Audio('./songs/call-me-maybe.mp3');
+// audio.play();
+// updateSquare(beat1s, beat2s, audio);
