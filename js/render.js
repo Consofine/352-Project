@@ -284,5 +284,5 @@ for (var i = 0; i < beats.length; i++) {
 
 
 var audio = new Audio('./songs/call-me-maybe.mp3');
-// audio.play();
-// updateSquare(beat1s, beat2s, audio);
+audio.play();
+updateSquare(beat1s, beat2s, audio);
