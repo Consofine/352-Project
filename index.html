@@ -60,6 +60,16 @@
       jumps. Once we had built a working project, we conducting results analysis by having our friends listen to audio samples, noting every time they heard a jump. Of the 139 jumps in 6 random samples, testers only thought they heard something
       wrong 16 times, and 3 of them were false-alarms. We concluded that these results were acceptable. We compared this to the original Infinite Jukebox, in which we heard no detectible jumps.
     </p>
+  <div class="content-wrap container">
+    <h3 class="demo-header text-center">Generating an Audio File</h3>
+    <p class="lead">
+      To test this on your own audio file, please download the repo and start the "Infinite Jukebox" Jupyter Notebook. Then, in the second cell, rename file_path to the path to the audio file you would like to run our infinite jukebox on and the resulting
+      audio will be outputted in the last cell. The printed "time jumps" list will indicate at what seconds the outputted song is making a jump and the printed "beat skips" indicates the ranges of beats being played. 
+      <br><br>
+      Note: for songs without much repeat, our implementation will still try to force beats to be similar to each other because we're using the best x% of distance measures and not some known tolerance level. 
+    </p>
+  </div>
+
     <h3 class="demo-header text-center">Similarity Matrices</h3>
     <div class="card-deck">
       <div class="card">
