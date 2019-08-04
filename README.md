@@ -1,2 +1,2 @@
 # infinite-jukebox
-Final project for EECCS 352, Machine Perception of Audio. 
+Read more about this [here](consofine.github.io)
