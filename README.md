@@ -1,2 +1,2 @@
 # infinite-jukebox
-Read more about this [here](https://www.consofine.github.io)
+Read more about this [here](https://consofine.github.io/)
